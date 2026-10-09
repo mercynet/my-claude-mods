@@ -24,6 +24,7 @@ Requires a Claude Code version with mod support (2.1.275 or later).
 | [spec-band](spec-band) | Band above the prompt with the branch's active spec: STATE age, phase, stale-STATE warning | Reads files; writes nothing |
 | [env-doctor](env-doctor) | Read-only preflight of the dev environment, plus `/env` | Runs `docker compose` queries and reads files; fixes nothing |
 | [graph-sync](graph-sync) | Refreshes a code knowledge graph in the background after edits | Spawns the configured update command (default `graphify update .`) in repos that already have `graphify-out/` |
+| [session-banner](session-banner) | Gradient ASCII logo with a one-time shimmer at the start of each session, until the first prompt | Reads one text file from your home folder (`~/.claude/banner.txt` by default); draws a band above the prompt |
 
 User-facing strings are in Portuguese; code and docs are in English.
 

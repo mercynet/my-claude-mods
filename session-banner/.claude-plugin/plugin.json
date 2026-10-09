@@ -1,0 +1,33 @@
+{
+  "name": "session-banner",
+  "version": "0.1.0",
+  "author": { "name": "Paulo Silva" },
+  "description": "Shows a plain-text logo with a gradient and one shimmer sweep above the prompt when a session starts, until the first prompt. /banner shows it again.",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "artFile": {
+      "type": "string",
+      "title": "Ficheiro da arte",
+      "description": "Texto simples com blocos Unicode (a cor vem do mod, não do ficheiro). Aceita ~/ (pasta pessoal), caminho absoluto ou relativo à pasta pessoal; nunca depende do projeto aberto. Ilegível = o mod fica inerte.",
+      "default": "~/.claude/banner.txt"
+    },
+    "colors": {
+      "type": "string",
+      "title": "Cores do gradiente",
+      "description": "Hexadecimais separados por vírgula, da esquerda para a direita (#rgb ou #rrggbb, de 1 a 8). Um valor inválido repõe o padrão.",
+      "default": "#1f6fb2,#52b6ec"
+    },
+    "tagline": {
+      "type": "string",
+      "title": "Legenda",
+      "description": "Linha discreta por baixo do logo. Vazio = nome da pasta da sessão; um hífen (-) = sem legenda.",
+      "default": ""
+    },
+    "lingerSeconds": {
+      "type": "number",
+      "title": "Esconder ao fim de (s)",
+      "description": "Segundos até o logo sumir sozinho. 0 = só some no primeiro prompt.",
+      "default": 0
+    }
+  }
+}

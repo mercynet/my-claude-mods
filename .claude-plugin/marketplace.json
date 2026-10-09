@@ -28,7 +28,12 @@
       "name": "graph-sync",
       "source": "./graph-sync",
       "description": "Refreshes the code knowledge graph in the background after edits (AST-only update command)."
+    },
+    {
+      "name": "session-banner",
+      "source": "./session-banner",
+      "description": "Gradient ASCII logo with a shimmer once at the start of each session, read from a plain text file."
     }
   ],
-  "description": "Personal Claude Code mods: context forecast, lean context, spec band, env doctor and graph sync."
+  "description": "Personal Claude Code mods: context forecast, lean context, spec band, env doctor, graph sync and a session banner."
 }
