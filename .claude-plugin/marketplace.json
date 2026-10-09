@@ -1,0 +1,34 @@
+{
+  "name": "local-mods",
+  "owner": {
+    "name": "Paulo Silva"
+  },
+  "plugins": [
+    {
+      "name": "context-forecast",
+      "source": "./context-forecast",
+      "description": "Context window forecast with a clear-or-compact score, usage limits and guided compaction."
+    },
+    {
+      "name": "lean-context",
+      "source": "./lean-context",
+      "description": "Measures and optionally strips configured sections of the project instruction file from the context while no spec is active."
+    },
+    {
+      "name": "spec-band",
+      "source": "./spec-band",
+      "description": "Band above the prompt with the active spec of the branch: STATE.md age, phase and a stale-STATE warning."
+    },
+    {
+      "name": "env-doctor",
+      "source": "./env-doctor",
+      "description": "Read-only dev environment preflight: stopped compose services, missing node_modules, empty cache files."
+    },
+    {
+      "name": "graph-sync",
+      "source": "./graph-sync",
+      "description": "Refreshes the code knowledge graph in the background after edits (AST-only update command)."
+    }
+  ],
+  "description": "Personal Claude Code mods: context forecast, lean context, spec band, env doctor and graph sync."
+}

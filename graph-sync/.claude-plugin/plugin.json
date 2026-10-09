@@ -1,0 +1,35 @@
+{
+  "name": "graph-sync",
+  "version": "0.1.0",
+  "author": {
+    "name": "Paulo Silva"
+  },
+  "description": "Keeps a code knowledge graph fresh: after code edits, runs an AST-only update command in the background when the turn ends (default: graphify update .).",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "command": {
+      "type": "string",
+      "title": "Comando de atualização",
+      "description": "Comando que atualiza o grafo de código, sem shell: partido por espaços em argumentos e executado na raiz do repositório. Deve ser só AST, sem modelo nem custo de API.",
+      "default": "graphify update ."
+    },
+    "minIntervalMinutes": {
+      "type": "number",
+      "title": "Intervalo mínimo (minutos)",
+      "description": "Tempo mínimo entre o início de duas atualizações do mesmo repositório. 0 desliga o intervalo.",
+      "default": 5
+    },
+    "timeoutSeconds": {
+      "type": "number",
+      "title": "Limite de duração (segundos)",
+      "description": "Passado este tempo o comando é terminado e a execução conta como falha; também é a idade a partir da qual um bloqueio de execução é considerado abandonado.",
+      "default": 600
+    },
+    "watchExtensions": {
+      "type": "string",
+      "title": "Extensões vigiadas",
+      "description": "Extensões de ficheiro, separadas por vírgulas e sem ponto, cuja edição marca o grafo como desatualizado.",
+      "default": "php,ts,tsx,js,jsx,py,go,rs,java,rb,cs,vue"
+    }
+  }
+}

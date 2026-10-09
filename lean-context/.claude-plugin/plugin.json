@@ -1,0 +1,27 @@
+{
+  "name": "lean-context",
+  "version": "0.1.0",
+  "description": "Measures and, once approved, strips configured sections of the project instruction file from the Claude Code context while no spec is active for the branch.",
+  "author": { "name": "Paulo Silva" },
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "omittableSections": {
+      "type": "string",
+      "title": "Secções omitíveis",
+      "description": "Títulos de nível 2 do ficheiro de instruções que podem sair do contexto em modo lean, separados por ';'. Cada título aceita '|bytes' no fim (tamanho esperado, para o aviso de desvio). Vazio: o mod fica inerte.",
+      "default": ""
+    },
+    "instructionFile": {
+      "type": "string",
+      "title": "Ficheiro de instruções",
+      "description": "Nome do ficheiro de instruções do projeto a que se aplica o corte (só o nome, sem pasta).",
+      "default": "AGENTS.md"
+    },
+    "specsDir": {
+      "type": "string",
+      "title": "Pasta das specs ativas",
+      "description": "Caminho relativo à raiz do projeto cujas subpastas têm o nome da branch com spec ativa. A pasta-mãe tem de existir, senão o mod fica inerte no projeto.",
+      "default": "specs/_active"
+    }
+  }
+}

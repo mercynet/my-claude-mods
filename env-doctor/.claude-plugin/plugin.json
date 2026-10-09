@@ -1,0 +1,26 @@
+{
+  "name": "env-doctor",
+  "version": "0.1.0",
+  "author": { "name": "Paulo Silva" },
+  "description": "Read-only preflight of a dev environment at session start: stopped compose services, missing node_modules for MCP servers, empty cache files and required paths. Never fixes anything, it only prints the command.",
+  "userConfig": {
+    "emptyFiles": {
+      "type": "string",
+      "title": "Ficheiros que não podem estar vazios",
+      "description": "Caminhos relativos à raiz do repositório, separados por vírgula. Um ficheiro vazio, quase vazio ou com a coleção 'routes' vazia dá aviso (típico de cache gravada sem dados). Vazio = verificação desligada.",
+      "default": ""
+    },
+    "requiredPaths": {
+      "type": "string",
+      "title": "Caminhos obrigatórios",
+      "description": "Caminhos relativos à raiz do repositório, separados por vírgula. Cada um em falta dá aviso. Vazio = verificação desligada.",
+      "default": ""
+    },
+    "ignoreServices": {
+      "type": "string",
+      "title": "Serviços compose a ignorar",
+      "description": "Nomes de serviços, separados por vírgula, que não precisam estar em execução (jobs de uma só execução, serviços de manutenção).",
+      "default": ""
+    }
+  }
+}

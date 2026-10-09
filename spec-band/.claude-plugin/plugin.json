@@ -1,0 +1,35 @@
+{
+  "name": "spec-band",
+  "version": "0.1.0",
+  "description": "A band above the prompt showing the active spec of the current branch: task progress, STATE.md age and phase, and a warning when STATE.md has not been updated for many edits.",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "specsDir": {
+      "type": "string",
+      "title": "Pasta das specs",
+      "description": "Pasta, relativa à raiz do projeto, onde cada branch com spec ativa tem uma subpasta com o nome da branch.",
+      "default": "specs/_active"
+    },
+    "tasksFile": {
+      "type": "string",
+      "title": "Ficheiro de tarefas",
+      "description": "Nome do ficheiro, dentro da pasta da spec, cujas caixas de verificação - [ ] e - [x] contam o progresso.",
+      "default": "tasks.md"
+    },
+    "stateFile": {
+      "type": "string",
+      "title": "Ficheiro de estado",
+      "description": "Nome do ficheiro, dentro da pasta da spec, de onde saem a idade e a fase.",
+      "default": "STATE.md"
+    },
+    "staleAfterEdits": {
+      "type": "number",
+      "title": "Edições até avisar",
+      "description": "Número de Edit/Write sem que o ficheiro de estado mude a partir do qual a banda passa a avisar.",
+      "default": 15
+    }
+  },
+  "author": {
+    "name": "Paulo Silva"
+  }
+}

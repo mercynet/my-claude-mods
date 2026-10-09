@@ -1,0 +1,35 @@
+{
+  "name": "context-forecast",
+  "version": "0.1.0",
+  "author": {
+    "name": "Paulo Silva"
+  },
+  "description": "Forecast of the context window with a clear-or-compact score, usage limits, cross-session calibration and guided compaction.",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "calibrate": {
+      "type": "boolean",
+      "title": "Calibrar limiares",
+      "description": "Registra o tamanho em que você faz /clear ou /compact e, com 5 amostras ou mais, troca os limiares 300k/650k pela mediana pessoal. Só regista e avisa: nunca limpa por você.",
+      "default": true
+    },
+    "classifyTopic": {
+      "type": "boolean",
+      "title": "Detectar mudança de assunto",
+      "description": "Pergunta a um modelo barato se cada prompt novo muda de assunto e soma pontos ao aviso de limpar. Gasta uma chamada de modelo por prompt; desligado por defeito.",
+      "default": false
+    },
+    "topicModel": {
+      "type": "string",
+      "title": "Modelo do classificador de assunto",
+      "description": "Alias ou id do modelo usado quando a deteção de assunto está ligada. Trabalho mecânico: o modelo mais barato.",
+      "default": "haiku"
+    },
+    "extraTestPattern": {
+      "type": "string",
+      "title": "Padrão extra de comando de testes",
+      "description": "Expressão regular (só a fonte, sem barras) somada aos comandos de teste já reconhecidos (pest, phpunit, pytest, jest, vitest, npm/yarn/pnpm test, go test, cargo test). Uma execução verde que a casa conta como ponto de controle. Vazio ou inválido: ignorado.",
+      "default": ""
+    }
+  }
+}
