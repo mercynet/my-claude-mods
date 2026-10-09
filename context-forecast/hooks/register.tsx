@@ -501,11 +501,12 @@ export const register: Register = (on, options) => {
   }).catch(() => ({ text: 'forecast: falha interna ao executar o comando (veja claude --debug)' }))
 
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
+    const below = await next(e)
     const state = await readState($, calibrateOn)
     const view = buildView(state, await $.clock.now(), e.props.bodyColumns)
 
     if (e.props.hasSurvey || view === null) {
-      return next(e)
+      return below
     }
 
     const asking = await read($, confirming)
@@ -513,7 +514,7 @@ export const register: Register = (on, options) => {
     const width = e.props.bodyColumns
     const { note } = view
 
-    return (
+    const own = (
       <Box width={width} flexDirection="column" alignItems="flex-end">
         <Text wrap="truncate">
           {view.headline.map((span, i) => (
@@ -543,6 +544,15 @@ export const register: Register = (on, options) => {
             <Button key="cancel" label="não" hotkey="n" onPress={() => update($, confirming, () => false)} />
           </Box>
         )}
+      </Box>
+    )
+
+    return below.type === 'engine' ? (
+      own
+    ) : (
+      <Box flexDirection="column">
+        {own}
+        {below}
       </Box>
     )
   })

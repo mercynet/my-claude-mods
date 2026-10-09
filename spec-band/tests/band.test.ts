@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'claude-code/testing'
 
 import {
+  BENEATH,
   BRANCH,
   MINUTE,
   NOW,
@@ -435,5 +436,63 @@ describe('staying out of the tool call', () => {
     for (let i = 0; i < 20; i += 1) await $.tool.call({ tool: 'Read', file_path: `${ROOT}/src/a${i}.ts` })
 
     expect(await screen(ui)).toBe(FULL)
+  })
+})
+
+describe('sharing the band with other plugins', () => {
+  test('draws above a tree another plugin draws beneath it', async ($, on) => {
+    stand(on, newWorld(), BENEATH)
+    const ui = await mountBand($)
+
+    await startSession($)
+
+    expect(await ui.drawn()).toMatchObject({
+      type: 'Box',
+      props: { flexDirection: 'column' },
+      children: [
+        { type: 'Box', children: [{ type: 'Text', children: [FULL] }] },
+        { type: 'Text', children: ['beneath band'] },
+      ],
+    })
+  })
+
+  test('draws alone when nothing is beneath it', async ($, on) => {
+    stand(on, newWorld())
+    const ui = await mountBand($)
+
+    await startSession($)
+
+    expect(await ui.drawn()).toMatchObject({ type: 'Box', children: [{ type: 'Text', children: [FULL] }] })
+    expect(await screen(ui)).toBe(FULL)
+  })
+
+  test('hands over the tree beneath when it has nothing to show', async ($, on) => {
+    stand(on, newWorld({ git: { exitCode: 128, stdout: '' } }), BENEATH)
+    const ui = await mountBand($)
+
+    await startSession($)
+
+    expect(await ui.drawn()).toMatchObject({ type: 'Text', children: ['beneath band'] })
+  })
+
+  test('yields to a survey and leaves the tree beneath alone', async ($, on) => {
+    stand(on, newWorld(), BENEATH)
+    const ui = await mountBand($, { hasSurvey: true })
+
+    await startSession($)
+
+    expect(await ui.drawn()).toMatchObject({ type: 'Text', children: ['beneath band'] })
+  })
+
+  test('the combined tree is one the surface can draw, on both surfaces', async ($, on) => {
+    stand(on, newWorld(), BENEATH)
+    const terminal = await mountBand($)
+    const desktop = await mountBand($, {}, 'desktop')
+
+    await startSession($)
+
+    for (const ui of [terminal, desktop]) {
+      expect(await screen(ui)).toBe(`${FULL}beneath band`)
+    }
   })
 })

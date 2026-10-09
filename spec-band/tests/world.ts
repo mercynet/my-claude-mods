@@ -49,7 +49,9 @@ export const newWorld = (overrides: Partial<World> = {}): World => ({
   ...overrides,
 })
 
-export function stand(on: On, world: World): void {
+export const BENEATH = { type: 'Text', props: { dimColor: true }, children: ['beneath band'] } as const
+
+export function stand(on: On, world: World, below?: typeof BENEATH): void {
   mock.clock(on, { now: NOW })
 
   on('session.root', () => ({ value: ROOT }))
@@ -83,7 +85,7 @@ export function stand(on: On, world: World): void {
   on('session.start', (_$, e) => ({ cwd: e.cwd }))
   on('prompt.submit', (_$, e) => ({ text: e.text }))
   on('turn.complete', (_$, e) => ({ text: e.answer }))
-  on('ui.render', () => ({ type: 'engine', ref: 0 }))
+  on('ui.render', () => (below ?? { type: 'engine', ref: 0 }) as never)
   on('tool.call', () => ({
     result: {},
     text: '',

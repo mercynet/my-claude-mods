@@ -113,8 +113,9 @@ export const register: Register = (on, raw) => {
   })
 
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
+    const below = await next(e)
     const snapshot = await read($, snapshotAtom)
-    if (e.props.hasSurvey || snapshot === null) return next(e)
+    if (e.props.hasSurvey || snapshot === null) return below
 
     const edits = await read($, editsAtom)
     const now = await $.clock.now()
@@ -130,7 +131,7 @@ export const register: Register = (on, raw) => {
 
     const { Box, Text } = $.ui.resolve(e)
 
-    return (
+    const own = (
       <Box>
         {view.isStale ? (
           <Text color="yellow" wrap="truncate">
@@ -141,6 +142,15 @@ export const register: Register = (on, raw) => {
             {view.text}
           </Text>
         )}
+      </Box>
+    )
+
+    return below.type === 'engine' ? (
+      own
+    ) : (
+      <Box flexDirection="column">
+        {own}
+        {below}
       </Box>
     )
   })

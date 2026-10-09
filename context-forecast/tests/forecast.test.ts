@@ -39,6 +39,7 @@ type World = {
   tool?: (e: Record<string, unknown>) => ToolAnswer
   compact?: (e: { trigger: string; instructions?: string }) => unknown
   classify?: () => string | undefined
+  below?: unknown
 }
 
 type Calls = {
@@ -76,7 +77,7 @@ const engine = (on: On, world: World = {}) => {
 
     return { value: undefined }
   })
-  on('ui.render', () => ({ type: 'engine', ref: 0 }))
+  on('ui.render', () => (world.below ?? { type: 'engine', ref: 0 }) as never)
   on('session.measure', (_$, e) => ({ changed: e.changed }))
   on('session.usage', (_$, e) => {
     calls.usage.push(e.breakdown)
@@ -1207,5 +1208,62 @@ describe('reviews and probes', () => {
 
     expect(why).toContain('limiares calibrados (5 amostras nesta janela, p25 100k, p75 100k)')
     expect(why).toContain('com 5 avaliados como certo passam a usar só esses')
+  })
+})
+
+describe('sharing the band with other plugins', () => {
+  const below = { type: 'Text', props: { dimColor: true }, children: ['beneath band'] }
+  const HEADLINE = '☁ Nublado ██░│░░░░░░░░ 16% · 160k/1M'
+
+  test('draws above a tree another plugin draws beneath it', async ($, on) => {
+    engine(on, { below })
+    const ui = await mountBand($)
+
+    await heavy($, 160_000)
+
+    expect(await ui.drawn()).toMatchObject({
+      type: 'Box',
+      props: { flexDirection: 'column' },
+      children: [{ type: 'Box', props: { alignItems: 'flex-end' } }, { type: 'Text', children: ['beneath band'] }]
+    })
+    expect(await screen(ui)).toBe(`${HEADLINE}\nbeneath band`)
+  })
+
+  test('draws alone when nothing is beneath it', async ($, on) => {
+    engine(on)
+    const ui = await mountBand($)
+
+    await heavy($, 160_000)
+
+    expect(await ui.drawn()).toMatchObject({ type: 'Box', props: { alignItems: 'flex-end' } })
+    expect(await screen(ui)).toBe(HEADLINE)
+  })
+
+  test('hands over the tree beneath when it has nothing to show', async ($, on) => {
+    engine(on, { below })
+    const ui = await mountBand($)
+
+    expect(await ui.drawn()).toMatchObject({ type: 'Text', children: ['beneath band'] })
+  })
+
+  test('yields to a survey and leaves the tree beneath alone', async ($, on) => {
+    engine(on, { below })
+    const ui = await $.ui.mount({ plugin: PLUGIN, surface: 'terminal', component: 'AbovePrompt', props: { ...BAND, hasSurvey: true } })
+
+    await heavy($, 160_000)
+
+    expect(await ui.drawn()).toMatchObject({ type: 'Text', children: ['beneath band'] })
+  })
+
+  test('the combined tree is one the surface can draw, on both surfaces', async ($, on) => {
+    engine(on, { below })
+    const terminal = await mountBand($)
+    const desktop = await mountBand($, 'desktop')
+
+    await heavy($, 160_000)
+
+    for (const ui of [terminal, desktop]) {
+      expect(await screen(ui)).toBe(`${HEADLINE}\nbeneath band`)
+    }
   })
 })
