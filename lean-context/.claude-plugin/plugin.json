@@ -1,8 +1,10 @@
 {
   "name": "lean-context",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Measures and, once approved, strips configured sections of the project instruction file from the Claude Code context while no spec is active for the branch.",
-  "author": { "name": "Paulo Silva" },
+  "author": {
+    "name": "Paulo Silva"
+  },
   "types": "./types/index.d.ts",
   "userConfig": {
     "omittableSections": {
