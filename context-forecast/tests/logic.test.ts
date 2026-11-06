@@ -512,6 +512,23 @@ describe('limits', () => {
     expect(windowWarning(window, NOW)?.text).toBe('janela de 5h em 80% · reinicia em 1h12 · no ritmo atual esgota em ~20min')
   })
 
+  test('a fast pace below 80% does not warn: only the percentage threshold opens the line', () => {
+    const window: LimitWindow = {
+      kind: 'five_hour',
+      percentUsed: 51,
+      resetsAt,
+      samples: [
+        { at: NOW - 1_800_000, percent: 21 },
+        { at: NOW, percent: 51 }
+      ]
+    }
+
+    expect(projectWindow(window, NOW).exhaustsFirst).toBe(true)
+    expect(windowWarning(window, NOW)).toBe(null)
+    expect(windowWarning({ ...window, percentUsed: 79 }, NOW)).toBe(null)
+    expect(windowWarning({ ...window, percentUsed: 80 }, NOW)?.color).toBe('red')
+  })
+
   test('a single reading has no pace, so only the percentage can warn', () => {
     const window: LimitWindow = { kind: 'five_hour', percentUsed: 60, resetsAt, samples: [{ at: NOW, percent: 60 }] }
 

@@ -71,15 +71,16 @@ export const projectWindow = (window: LimitWindow, now: number): WindowProjectio
 export type WindowWarning = { text: string; color: string }
 
 const WARN_PERCENT = 80
-const WARN_PERCENT_WITH_PACE = 50
 const CRITICAL_PERCENT = 90
 
+// Só avisa a partir de WARN_PERCENT: aos 50% ainda há muito por gastar, mesmo que o ritmo atual
+// esgote antes de reiniciar. O ritmo continua a aparecer no texto, mas já não dispara o aviso.
 export const windowWarning = (window: LimitWindow, now: number): WindowWarning | null => {
   const { resetsInMs, exhaustsInMs, exhaustsFirst } = projectWindow(window, now)
   const critical = window.percentUsed >= CRITICAL_PERCENT
   const high = window.percentUsed >= WARN_PERCENT
 
-  if (!critical && !high && !(exhaustsFirst && window.percentUsed >= WARN_PERCENT_WITH_PACE)) return null
+  if (!critical && !high) return null
 
   const parts = [`janela de ${limitLabel(window.kind)} em ${Math.round(window.percentUsed)}%`]
 
